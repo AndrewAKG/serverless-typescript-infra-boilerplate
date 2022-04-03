@@ -8,7 +8,7 @@
 - `src`
     - `lib` (shared between all microservices)
         - `middlewares` contains all middlewares
-        - `models all` typescript models
+        - `models` all typescript models
         - `repositories` all repos interacting with database
         - `services` services interacting with repos
         - `utils` utils functions and classes
