@@ -1,0 +1,24 @@
+ConfigurationsTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: mood-configurations-${self:provider.stage}
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: pkey #type
+        AttributeType: S
+      - AttributeName: skey #id
+        AttributeType: S
+    KeySchema:
+      - AttributeName: pkey
+        KeyType: HASH
+      - AttributeName: skey
+        KeyType: RANGE
+    Tags:
+      - Key: Environment
+        Value: ${self:provider.stage}
+
+Outputs:
+  ConfigurationsTableName:
+    Value: !Ref ConfigurationsTable
+  ConfigurationsTableArn:
+    Value: !GetAtt ConfigurationsTable.Arn

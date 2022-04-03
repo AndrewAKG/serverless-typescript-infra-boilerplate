@@ -1,0 +1,56 @@
+service: mood-users-service
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'me-south-1'}
+  apiGateway:
+    shouldStartNameWithService: true
+    restApiId: ${cf:mood-infra-${self:provider.stage}.SharedRestApiId}
+    restApiRootResourceId: ${cf:mood-infra-${self:provider.stage}.RootResourceId}
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
+    users_table_name: ${cf:mood-database-${self:provider.stage}.UsersTableName}
+  iam:
+    role:
+      statements:
+        - ${file(iam/dynamodb.yml):DynamoDBTablesFullAccess}
+
+functions:
+  createUserProfile:
+    handler: src/users.createUserProfile
+    events:
+      - http:
+          path: /users
+          method: POST
+          cors: true
+  getUserProfile:
+    handler: src/users.getUserProfile
+    events:
+      - http:
+          path: /users/{userId}
+          method: GET
+          cors: true
+
+package:
+  individually: true
+
+custom:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    exclude: ['aws-sdk']
+    target: 'node14'
+    define:
+      'require.resolve': undefined
+    platform: 'node'
+    concurrency: 10
+  serverless-offline:
+    httpPort: 3000

@@ -1,0 +1,15 @@
+service: mood-infra
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ${opt:region, 'me-south-1'}
+  stage: ${opt:stage, 'dev'}
+
+resources:
+  Resources:
+    SharedRestApi: ${file(resources/api-gateway.yml):SharedRestApi}
+
+  Outputs:
+    SharedRestApiId: ${file(resources/api-gateway.yml):Outputs.SharedRestApiId}
+    RootResourceId: ${file(resources/api-gateway.yml):Outputs.RootResourceId}

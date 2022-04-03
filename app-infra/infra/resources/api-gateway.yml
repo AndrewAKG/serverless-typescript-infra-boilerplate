@@ -1,0 +1,11 @@
+SharedRestApi:
+  Type: 'AWS::ApiGateway::RestApi'
+  Properties:
+    Description: Mood app shared API Gateway for all micro services
+    Name: mood-app-shared-api-${self:provider.stage}
+
+Outputs:
+  SharedRestApiId:
+    Value: !Ref SharedRestApi
+  RootResourceId:
+    Value: !GetAtt SharedRestApi.RootResourceId

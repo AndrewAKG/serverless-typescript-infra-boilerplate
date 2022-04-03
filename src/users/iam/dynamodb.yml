@@ -1,0 +1,7 @@
+DynamoDBTablesFullAccess:
+  Effect: Allow
+  Action:
+    - dynamodb:*
+  Resource:
+    - ${cf:mood-database-${self:provider.stage}.UsersTableArn}
+    - ${cf:mood-database-${self:provider.stage}.UsersTableArn}/*

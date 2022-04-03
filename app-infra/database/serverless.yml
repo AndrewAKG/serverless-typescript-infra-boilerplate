@@ -1,0 +1,19 @@
+service: mood-database
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ${opt:region, 'me-south-1'}
+  stage: ${opt:stage, 'dev'}
+
+resources:
+  Resources:
+    UsersTable: ${file(resources/users.yml):UsersTable}
+    ConfigurationsTable: ${file(resources/configurations.yml):ConfigurationsTable}
+
+  Outputs:
+    UsersTableName: ${file(resources/users.yml):Outputs.UsersTableName}
+    UsersTableStreamArn: ${file(resources/users.yml):Outputs.UsersTableStreamArn}
+    UsersTableArn: ${file(resources/users.yml):Outputs.UsersTableArn}
+    ConfigurationsTableName: ${file(resources/configurations.yml):Outputs.ConfigurationsTableName}
+    ConfigurationsTableArn: ${file(resources/configurations.yml):Outputs.ConfigurationsTableArn}
